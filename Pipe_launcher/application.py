@@ -3,6 +3,15 @@ from subprocess import Popen, PIPE
 import sys
 import os
 
+def ressource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class Application(QtGui.QWidget):
     """docstring for Application"""
@@ -29,7 +38,7 @@ class Application(QtGui.QWidget):
             self.showNormal()
 
     def set_default_software(self):
-        maya_icon = "Maya-icon.png"
+        maya_icon = ressource_path("Maya-icon.png")
         maya_exe = "C:\\Program Files\\Autodesk\\Maya2017\\bin\\maya.exe"
         maya_name = "Maya 2017"
 
@@ -41,7 +50,7 @@ class Application(QtGui.QWidget):
 
         blender_software = {
             "name": "Blender",
-            "icon": "Blender-icon.png",
+            "icon": ressource_path("Blender-icon.png"),
             "exe": "C:\\Program Files\\Blender Foundation\\Blender\\blender.exe"}
         self.softwares.append(maya_software)
         self.softwares.append(blender_software)
@@ -117,7 +126,7 @@ class Application(QtGui.QWidget):
         self.env_vars = new_dict
 
     def setIcon(self):
-        icon = QtGui.QIcon("Cassette-icon.png")
+        icon = QtGui.QIcon(ressource_path("Cassette.ico"))
         self.trayIcon.setIcon(icon)
         self.setWindowIcon(icon)
 
